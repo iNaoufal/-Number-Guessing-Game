@@ -8,7 +8,7 @@ USER_INFO=$($PSQL "SELECT username, games_played, best_game FROM users WHERE use
 
 if [[ -z $USER_INFO ]]; then
     echo "Welcome, $USERNAME! It looks like this is your first time here."
-    $PSQL "INSERT INTO users(username) VALUES('$USERNAME')" 
+    $PSQL "INSERT INTO users(username) VALUES('$USERNAME')" > /dev/null 
 else
     IFS="|" read DB_USERNAME GAMES_PLAYED BEST_GAME <<< "$USER_INFO"
     echo "Welcome back, $DB_USERNAME! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."
@@ -37,6 +37,6 @@ echo "You guessed it in $((NUMBER_OF_GUESSES + 1)) tries. The secret number was 
 
 FINAL_GUESSES=$((NUMBER_OF_GUESSES + 1))
 
-$PSQL "UPDATE users SET games_played = games_played + 1 WHERE username = '$USERNAME'" 
+$PSQL "UPDATE users SET games_played = games_played + 1 WHERE username = '$USERNAME'" > /dev/null 
 
-$PSQL "UPDATE users SET best_game = $FINAL_GUESSES WHERE username = '$USERNAME' AND (best_game IS NULL OR best_game > $FINAL_GUESSES)" 
+$PSQL "UPDATE users SET best_game = $FINAL_GUESSES WHERE username = '$USERNAME' AND (best_game IS NULL OR best_game > $FINAL_GUESSES)" > /dev/null
